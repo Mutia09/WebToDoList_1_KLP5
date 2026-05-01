@@ -29,7 +29,7 @@
     </p>
 </div>
 
-<!-- CALENDAR -->
+<!-- KALENDER -->
 <div id="calendarPage">
     <h2>Kalender</h2>
     <p id="user"></p>
@@ -94,14 +94,22 @@
     <button onclick="logout()">Logout</button>
 </div>
 
-<!-- TO DO PAGE  -->
+<!-- HALAMAN TO DO -->
 <div id="todoPage">
     <h2>To Do List</h2>
     <p id="todoUser"></p>
 
     <h3 id="todoDate">Tanggal: -</h3>
 
-    <p id="progressText">0/0</p>
+    <div>
+        <h4 id="motivasiText">Semangat! </h4>
+
+        <div style="width:200px; height:10px; border:1px solid black;">
+            <div id="progressBar" style="height:100%; width:0%; background:black;"></div>
+        </div>
+
+        <p id="progressText">0/0</p>
+    </div>
 
     <input id="taskInput" placeholder="Tambah task">
     <button onclick="addTask()">+</button>
@@ -114,7 +122,7 @@
 
 <script>
 
-//  NAVIGASI 
+// NAVIGASI 
 function showPage(pageId) {
     document.getElementById("registerPage").style.display = "none";
     document.getElementById("loginPage").style.display = "none";
@@ -171,10 +179,6 @@ function register() {
     localStorage.setItem("users", JSON.stringify(users));
 
     alert("Berhasil daftar!");
-
-    document.getElementById("regUser").value = "";
-    document.getElementById("regPass").value = "";
-
     showPage("loginPage");
 }
 
@@ -182,23 +186,13 @@ function login() {
     let u = document.getElementById("loginUser").value.trim();
     let p = document.getElementById("loginPass").value.trim();
 
-    if (u === "" || p === "") {
-        alert("Username dan password wajib diisi!");
-        return;
-    }
-
     let users = getUsers();
     let user = users.find(user => user.username === u && user.password === p);
 
     if (user) {
         localStorage.setItem("loggedInUser", u);
-
         resetUI();
         loadUser();
-
-        document.getElementById("loginUser").value = "";
-        document.getElementById("loginPass").value = "";
-
         showPage("calendarPage");
     } else {
         alert("Login gagal!");
@@ -225,14 +219,12 @@ function loadUser() {
 function selectDate(date) {
     currentDate = date;
     document.getElementById("todoDate").innerText = "Tanggal: " + date;
-
     renderTasks();
     showPage("todoPage");
 }
 
 function getTasks() {
     let user = localStorage.getItem("loggedInUser");
-    if (!user) return {};
     return JSON.parse(localStorage.getItem("tasks_" + user)) || {};
 }
 
@@ -244,26 +236,10 @@ function saveTasks(tasks) {
 function addTask() {
     let input = document.getElementById("taskInput");
 
-    if (!currentDate) {
-        alert("Pilih tanggal dulu!");
-        return;
-    }
-
-    if (input.value.trim() === "") {
-        alert("Task tidak boleh kosong!");
-        return;
-    }
-
     let tasks = getTasks();
+    if (!tasks[currentDate]) tasks[currentDate] = [];
 
-    if (!tasks[currentDate]) {
-        tasks[currentDate] = [];
-    }
-
-    tasks[currentDate].push({
-        text: input.value,
-        done: false
-    });
+    tasks[currentDate].push({ text: input.value, done: false });
 
     saveTasks(tasks);
     input.value = "";
@@ -274,19 +250,9 @@ function renderTasks() {
     let list = document.getElementById("taskList");
     list.innerHTML = "";
 
-    if (!currentDate) {
-        updateProgress([]);
-        return;
-    }
+    let tasks = getTasks()[currentDate] || [];
 
-    let tasks = getTasks();
-
-    if (!tasks[currentDate]) {
-        updateProgress([]);
-        return;
-    }
-
-    tasks[currentDate].forEach((task, i) => {
+    tasks.forEach((task, i) => {
         let div = document.createElement("div");
 
         div.innerHTML =
@@ -298,35 +264,45 @@ function renderTasks() {
         list.appendChild(div);
     });
 
-    updateProgress(tasks[currentDate]);
+    updateProgress(tasks);
 }
 
-function toggleTask(index) {
+function toggleTask(i) {
     let tasks = getTasks();
-    tasks[currentDate][index].done = !tasks[currentDate][index].done;
+    tasks[currentDate][i].done = !tasks[currentDate][i].done;
     saveTasks(tasks);
     renderTasks();
 }
 
-function deleteTask(index) {
+function deleteTask(i) {
     let tasks = getTasks();
-    tasks[currentDate].splice(index, 1);
+    tasks[currentDate].splice(i, 1);
     saveTasks(tasks);
     renderTasks();
 }
 
+//  PROGRESS 
 function updateProgress(tasks) {
     let total = tasks.length;
     let done = tasks.filter(t => t.done).length;
+
     document.getElementById("progressText").innerText = done + "/" + total;
+
+    let percent = total === 0 ? 0 : (done / total) * 100;
+    document.getElementById("progressBar").style.width = percent + "%";
+
+    let text = "Semangat!";
+
+    if (total === 0) text = "Yuk mulai tugasmu!";
+    else if (percent === 100) text = "Mantap! Semua selesai";
+    else if (percent >= 50) text = "Bagus! Tetap lanjut";
+
+    document.getElementById("motivasiText").innerText = text;
 }
 
-//  INIT 
+// INIT 
 window.onload = function() {
-    currentDate = null;
-
     let user = localStorage.getItem("loggedInUser");
-
     if (user) {
         loadUser();
         showPage("calendarPage");
