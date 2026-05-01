@@ -1,1 +1,341 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>To Do App</title>
+</head>
+<body>
 
+<!-- REGISTER  -->
+<div id="registerPage">
+    <h2>Daftar</h2>
+    <input id="regUser" placeholder="Username"><br><br>
+    <input id="regPass" type="password" placeholder="Password"><br><br>
+    <button onclick="register()">Daftar</button>
+
+    <p>Sudah punya akun?
+        <a href="#" onclick="showPage('loginPage')">Login</a>
+    </p>
+</div>
+
+<!-- LOGIN  -->
+<div id="loginPage">
+    <h2>Login</h2>
+    <input id="loginUser" placeholder="Username"><br><br>
+    <input id="loginPass" type="password" placeholder="Password"><br><br>
+    <button onclick="login()">Login</button>
+
+    <p>Belum punya akun?
+        <a href="#" onclick="showPage('registerPage')">Daftar</a>
+    </p>
+</div>
+
+<!-- CALENDAR -->
+<div id="calendarPage">
+    <h2>Kalender</h2>
+    <p id="user"></p>
+
+    <h3>May 2026</h3>
+
+    <table border="1">
+        <tr>
+            <th>S</th><th>M</th><th>T</th><th>W</th><th>T</th><th>F</th><th>S</th>
+        </tr>
+
+        <tr>
+            <td></td><td></td><td></td>
+            <td onclick="selectDate(1)">1</td>
+            <td onclick="selectDate(2)">2</td>
+            <td onclick="selectDate(3)">3</td>
+            <td onclick="selectDate(4)">4</td>
+        </tr>
+
+        <tr>
+            <td onclick="selectDate(5)">5</td>
+            <td onclick="selectDate(6)">6</td>
+            <td onclick="selectDate(7)">7</td>
+            <td onclick="selectDate(8)">8</td>
+            <td onclick="selectDate(9)">9</td>
+            <td onclick="selectDate(10)">10</td>
+            <td onclick="selectDate(11)">11</td>
+        </tr>
+
+        <tr>
+            <td onclick="selectDate(12)">12</td>
+            <td onclick="selectDate(13)">13</td>
+            <td onclick="selectDate(14)">14</td>
+            <td onclick="selectDate(15)">15</td>
+            <td onclick="selectDate(16)">16</td>
+            <td onclick="selectDate(17)">17</td>
+            <td onclick="selectDate(18)">18</td>
+        </tr>
+
+        <tr>
+            <td onclick="selectDate(19)">19</td>
+            <td onclick="selectDate(20)">20</td>
+            <td onclick="selectDate(21)">21</td>
+            <td onclick="selectDate(22)">22</td>
+            <td onclick="selectDate(23)">23</td>
+            <td onclick="selectDate(24)">24</td>
+            <td onclick="selectDate(25)">25</td>
+        </tr>
+
+        <tr>
+            <td onclick="selectDate(26)">26</td>
+            <td onclick="selectDate(27)">27</td>
+            <td onclick="selectDate(28)">28</td>
+            <td onclick="selectDate(29)">29</td>
+            <td onclick="selectDate(30)">30</td>
+            <td onclick="selectDate(31)">31</td>
+            <td></td>
+        </tr>
+    </table>
+
+    <br>
+    <button onclick="logout()">Logout</button>
+</div>
+
+<!-- TO DO PAGE  -->
+<div id="todoPage">
+    <h2>To Do List</h2>
+    <p id="todoUser"></p>
+
+    <h3 id="todoDate">Tanggal: -</h3>
+
+    <p id="progressText">0/0</p>
+
+    <input id="taskInput" placeholder="Tambah task">
+    <button onclick="addTask()">+</button>
+
+    <div id="taskList"></div>
+
+    <br><br>
+    <button onclick="showPage('calendarPage')">⬅ Kembali</button>
+</div>
+
+<script>
+
+//  NAVIGASI 
+function showPage(pageId) {
+    document.getElementById("registerPage").style.display = "none";
+    document.getElementById("loginPage").style.display = "none";
+    document.getElementById("calendarPage").style.display = "none";
+    document.getElementById("todoPage").style.display = "none";
+
+    document.getElementById(pageId).style.display = "block";
+
+    if (pageId === "loginPage") {
+        resetUI();
+    }
+}
+
+// RESET UI 
+function resetUI() {
+    currentDate = null;
+
+    document.getElementById("taskList").innerHTML = "";
+    document.getElementById("progressText").innerText = "0/0";
+    document.getElementById("todoDate").innerText = "Tanggal: -";
+    document.getElementById("taskInput").value = "";
+
+    document.getElementById("user").innerText = "";
+    document.getElementById("todoUser").innerText = "";
+
+    document.getElementById("loginUser").value = "";
+    document.getElementById("loginPass").value = "";
+    document.getElementById("regUser").value = "";
+    document.getElementById("regPass").value = "";
+}
+
+// USER 
+function getUsers() {
+    return JSON.parse(localStorage.getItem("users")) || [];
+}
+
+function register() {
+    let u = document.getElementById("regUser").value.trim();
+    let p = document.getElementById("regPass").value.trim();
+
+    if (u === "" || p === "") {
+        alert("Username dan password wajib diisi!");
+        return;
+    }
+
+    let users = getUsers();
+
+    if (users.find(user => user.username === u)) {
+        alert("Username sudah ada!");
+        return;
+    }
+
+    users.push({ username: u, password: p });
+    localStorage.setItem("users", JSON.stringify(users));
+
+    alert("Berhasil daftar!");
+
+    document.getElementById("regUser").value = "";
+    document.getElementById("regPass").value = "";
+
+    showPage("loginPage");
+}
+
+function login() {
+    let u = document.getElementById("loginUser").value.trim();
+    let p = document.getElementById("loginPass").value.trim();
+
+    if (u === "" || p === "") {
+        alert("Username dan password wajib diisi!");
+        return;
+    }
+
+    let users = getUsers();
+    let user = users.find(user => user.username === u && user.password === p);
+
+    if (user) {
+        localStorage.setItem("loggedInUser", u);
+
+        resetUI();
+        loadUser();
+
+        document.getElementById("loginUser").value = "";
+        document.getElementById("loginPass").value = "";
+
+        showPage("calendarPage");
+    } else {
+        alert("Login gagal!");
+    }
+}
+
+function logout() {
+    localStorage.removeItem("loggedInUser");
+    resetUI();
+    showPage("loginPage");
+}
+
+// TO DO 
+let currentDate = null;
+
+function loadUser() {
+    let user = localStorage.getItem("loggedInUser");
+    if (!user) return;
+
+    document.getElementById("user").innerText = "Halo, " + user;
+    document.getElementById("todoUser").innerText = "Halo, " + user;
+}
+
+function selectDate(date) {
+    currentDate = date;
+    document.getElementById("todoDate").innerText = "Tanggal: " + date;
+
+    renderTasks();
+    showPage("todoPage");
+}
+
+function getTasks() {
+    let user = localStorage.getItem("loggedInUser");
+    if (!user) return {};
+    return JSON.parse(localStorage.getItem("tasks_" + user)) || {};
+}
+
+function saveTasks(tasks) {
+    let user = localStorage.getItem("loggedInUser");
+    localStorage.setItem("tasks_" + user, JSON.stringify(tasks));
+}
+
+function addTask() {
+    let input = document.getElementById("taskInput");
+
+    if (!currentDate) {
+        alert("Pilih tanggal dulu!");
+        return;
+    }
+
+    if (input.value.trim() === "") {
+        alert("Task tidak boleh kosong!");
+        return;
+    }
+
+    let tasks = getTasks();
+
+    if (!tasks[currentDate]) {
+        tasks[currentDate] = [];
+    }
+
+    tasks[currentDate].push({
+        text: input.value,
+        done: false
+    });
+
+    saveTasks(tasks);
+    input.value = "";
+    renderTasks();
+}
+
+function renderTasks() {
+    let list = document.getElementById("taskList");
+    list.innerHTML = "";
+
+    if (!currentDate) {
+        updateProgress([]);
+        return;
+    }
+
+    let tasks = getTasks();
+
+    if (!tasks[currentDate]) {
+        updateProgress([]);
+        return;
+    }
+
+    tasks[currentDate].forEach((task, i) => {
+        let div = document.createElement("div");
+
+        div.innerHTML =
+            "<input type='checkbox' " + (task.done ? "checked" : "") +
+            " onchange='toggleTask("+i+")'> " +
+            (task.done ? "<s>" + task.text + "</s>" : task.text) +
+            " <button onclick='deleteTask("+i+")'>Hapus</button>";
+
+        list.appendChild(div);
+    });
+
+    updateProgress(tasks[currentDate]);
+}
+
+function toggleTask(index) {
+    let tasks = getTasks();
+    tasks[currentDate][index].done = !tasks[currentDate][index].done;
+    saveTasks(tasks);
+    renderTasks();
+}
+
+function deleteTask(index) {
+    let tasks = getTasks();
+    tasks[currentDate].splice(index, 1);
+    saveTasks(tasks);
+    renderTasks();
+}
+
+function updateProgress(tasks) {
+    let total = tasks.length;
+    let done = tasks.filter(t => t.done).length;
+    document.getElementById("progressText").innerText = done + "/" + total;
+}
+
+//  INIT 
+window.onload = function() {
+    currentDate = null;
+
+    let user = localStorage.getItem("loggedInUser");
+
+    if (user) {
+        loadUser();
+        showPage("calendarPage");
+    } else {
+        showPage("loginPage");
+    }
+}
+
+</script>
+
+</body>
+</html>
