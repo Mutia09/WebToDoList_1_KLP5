@@ -11,7 +11,6 @@ function saveUsers(users) {
 // Register
 function register(username, password) {
     let users = getUsers();
-
     let userExists = users.find(user => user.username === username);
     if (userExists) {
         alert("Username sudah digunakan!");
@@ -21,7 +20,6 @@ function register(username, password) {
     // simpan user baru
     users.push({ username, password });
     saveUsers(users);
-
     alert("Berhasil daftar!");
     return true;
 }

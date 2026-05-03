@@ -1,1 +1,553 @@
+/* IMPORT FONT */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+label {
+    color: white;
+}
+
+.main-title,
+.subtitle,
+#calendarPage h2 {
+    text-align: center;
+}
+
+.subtitle {
+    margin-bottom: 25px;
+}
+
+h1,
+h2,
+h3,
+h4 {
+    font-family: 'Playfair Display', serif;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+
+    min-height: 100vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    overflow: hidden;
+    overflow-x: hidden;
+
+    padding: 20px;
+
+    color: white;
+
+    background:
+        radial-gradient(circle at top left, #ff4d6d22, transparent 30%),
+        radial-gradient(circle at bottom right, #7f5af022, transparent 30%),
+        linear-gradient(135deg, #0f172a, #111827, #0b1120);
+}
+
+/* BACKGROUND */
+body::before {
+    content: "";
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    background: #ff4d6d22;
+    border-radius: 50%;
+    top: -150px;
+    left: -100px;
+    filter: blur(120px);
+}
+
+body::after {
+    content: "";
+    position: absolute;
+    width: 400px;
+    height: 400px;
+    background: #7f5af022;
+    border-radius: 50%;
+    bottom: -120px;
+    right: -80px;
+    filter: blur(120px);
+}
+
+/* APP */
+.app {
+    width: 100%;
+    max-width: 390px;
+}
+
+/* GLASS CARD */
+.glass {
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(22px);
+
+    border-radius: 30px;
+    padding: 28px;
+
+    box-shadow:
+        0 8px 40px rgba(0, 0, 0, 0.35),
+        inset 0 1px 1px rgba(255, 255, 255, 0.06);
+
+    animation: fadeUp 0.5s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+/* PAGE */
+.page {
+    animation: fadeUp 0.5s ease;
+}
+
+/* TITLE */
+h2 {
+    font-weight: 700;
+    margin-bottom: 10px;
+    background: linear-gradient(135deg, #ff8fa3, #ffd6e0);
+
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.subtitle {
+    color: #b6b6c5;
+    margin-bottom: 25px;
+    font-size: 14px;
+}
+
+/* INPUT */
+input {
+    width: 100%;
+    padding: 14px 18px;
+    border: none;
+    outline: none;
+    border-radius: 16px;
+
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+
+    color: white;
+    font-size: 14px;
+
+    transition: 0.3s;
+}
+
+input::placeholder {
+    color: #9ca3af;
+}
+
+input:focus {
+    transform: translateY(-2px);
+
+    border: 1px solid #ff4d6d;
+
+    box-shadow:
+        0 0 0 4px rgba(255, 77, 109, 0.12),
+        0 10px 30px rgba(255, 77, 109, 0.15);
+}
+
+/* JUDUL UTAMA */
+.main-title {
+    text-align: center;
+
+    font-size: 38px;
+
+    font-family: 'Playfair Display', serif;
+
+    font-weight: 700;
+
+    background: linear-gradient(135deg, #ff8fa3, #ffd6e0);
+
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+
+    margin-bottom: 5px;
+}
+
+/* LOGIN & DAFTAR */
+.form-title {
+    color: white;
+
+    font-size: 24px;
+
+    font-family: 'Poppins', sans-serif;
+
+    font-weight: 600;
+
+    text-align: left;
+
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+/* BUTTON */
+.btn-main {
+    width: 100%;
+    border: none !important;
+    padding: 14px;
+    border-radius: 16px !important;
+
+    font-weight: 600;
+
+    background: linear-gradient(135deg, #ff4d6d, #ff758f) !important;
+
+    color: white !important;
+
+    transition: 0.3s;
+}
+
+.btn-main:hover {
+    transform: translateY(-3px) scale(1.01);
+
+    box-shadow:
+        0 10px 25px rgba(255, 77, 109, 0.35);
+}
+
+/* LINK */
+a {
+    color: #ff8fa3;
+    text-decoration: none;
+}
+
+a:hover {
+    color: white;
+}
+
+.table {
+    color: white !important;
+}
+
+/* CALENDAR */
+.calendar {
+    border-collapse: separate;
+    border-spacing: 8px;
+}
+
+.calendar th {
+    text-align: center;
+    color: #cbd5e1 !important;
+    font-size: 13px;
+    padding-bottom: 10px;
+}
+
+.calendar td {
+    width: 42px;
+    height: 42px;
+
+    text-align: center;
+
+    border-radius: 14px;
+
+    cursor: pointer;
+
+    transition: 0.25s;
+
+    color: #d1d5db;
+}
+
+.calendar td:hover {
+    background: rgba(255, 255, 255, 0.08);
+
+    transform: translateY(-2px);
+}
+
+.calendar td.active {
+    background: linear-gradient(135deg, #ff4d6d, #ff758f);
+
+    color: white;
+    font-weight: 600;
+
+    box-shadow:
+        0 8px 20px rgba(255, 77, 109, 0.4);
+    transform: scale(1.05);
+}
+
+
+/* ADD BUTTON */
+.add-btn {
+    width: 58px;
+    height: 58px;
+
+    border: none;
+
+    border-radius: 18px;
+
+    background: linear-gradient(135deg, #ff4d6d, #ff758f);
+
+    color: white;
+
+    font-size: 24px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.add-btn:hover {
+    transform: scale(1.08) rotate(90deg);
+}
+
+/* TASK */
+.task-item {
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    margin-top: 14px;
+    padding: 15px 16px;
+
+    border-radius: 18px;
+
+    background: rgba(255, 255, 255, 0.06);
+
+    border: 1px solid rgba(255, 255, 255, 0.06);
+
+    transition: 0.3s;
+
+    animation: fadeUp 0.3s ease;
+}
+
+.task-item:hover {
+    transform: translateY(-2px);
+
+    background: rgba(255, 255, 255, 0.08);
+}
+
+/* CHECKBOX */
+.task-item input[type="checkbox"] {
+    accent-color: #ff4d6d;
+    width: 16px;
+    height: 16px;
+}
+
+/* DELETE */
+.task-item button {
+    border: none;
+
+    width: 32px;
+    height: 32px;
+
+    border-radius: 10px;
+
+    background: #ff4d6d22;
+    color: #ff758f;
+
+    transition: 0.3s;
+}
+
+.task-item button:hover {
+    background: #ff4d6d;
+    color: white;
+}
+
+.task-input-area {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+}
+
+.task-input-area input {
+    flex: 1;
+
+    width: 100%;
+
+    height: 58px;
+
+    padding: 0 20px;
+
+    font-size: 16px;
+}
+
+/* PROGRESS */
+.progress {
+    height: 10px;
+
+    border-radius: 999px;
+
+    background: rgba(255, 255, 255, 0.08);
+
+    overflow: hidden;
+}
+
+.progress-bar {
+    border-radius: 999px;
+
+    background: linear-gradient(90deg, #ff4d6d, #ff758f);
+
+    transition: 0.4s;
+}
+
+.progress-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    width: 100%;
+}
+
+.progress {
+    flex: 1;
+}
+
+#progressText {
+    margin: 0;
+
+    color: white;
+
+    font-weight: 600;
+
+    font-size: 15px;
+
+    min-width: 35px;
+}
+
+/* MOTIVATION */
+#motivasiText {
+    font-size: 14px;
+    color: #cbd5e1;
+    margin-bottom: 12px;
+}
+
+/* BACK BUTTON */
+.btn-outline-light {
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: 0.3s;
+}
+
+.btn-outline-light:hover {
+    background: white;
+    color: #111827;
+}
+
+/* USER */
+#user,
+#todoUser {
+    color: #ffb3c1;
+    font-size: 18px;
+
+    font-weight: 600;
+
+    letter-spacing: 0.5px;
+}
+
+#todoDate {
+    color: #ffb3c1;
+
+    font-size: 28px;
+    font-family: 'Playfair Display', serif;
+
+    font-weight: 600;
+
+    margin-bottom: 8px;
+    text-align: center;
+}
+
+/* ANIMATION */
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+#todoPage .glass {
+    height: 90vh;
+    overflow: hidden;
+}
+
+#taskList {
+    flex: 1;
+
+    overflow-y: auto;
+
+    min-height: 0;
+
+    margin-top: 18px;
+
+    padding-right: 6px;
+    height: 100%;
+}
+
+.task-input-area,
+.progress-wrapper,
+#todoDate,
+#motivasiText,
+.btn-outline-light {
+    flex-shrink: 0;
+}
+
+#taskList::-webkit-scrollbar {
+    width: 6px;
+}
+
+#taskList::-webkit-scrollbar-thumb {
+    background: #ff758f88;
+    border-radius: 20px;
+}
+
+/* MOBILE */
+@media(max-width:480px) {
+
+    .app {
+        width: 100%;
+        max-width: 430px;
+    }
+
+    .glass {
+        padding: 22px;
+        width: 100%;
+    }
+
+}
+
+@media(max-width:768px) {
+
+    body {
+        padding: 14px;
+    }
+
+    .app {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .glass {
+        padding: 22px;
+        border-radius: 24px;
+    }
+
+    #todoDate {
+        font-size: 32px;
+    }
+
+    .task-item {
+        padding: 14px;
+    }
+
+    #calendarPage .glass {
+        max-height: none;
+    }
+
+}
