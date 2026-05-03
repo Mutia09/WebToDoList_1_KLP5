@@ -259,18 +259,24 @@
             }
 
             function addTask() {
-                let input = document.getElementById("taskInput");
+              let input = document.getElementById("taskInput");
+              let value = input.value.trim(); // hapus spasi di depan & belakang
 
-                let tasks = getTasks();
-                if (!tasks[currentDate]) tasks[currentDate] = [];
+              if (value === "") {
+              alert("Task tidak boleh kosong!");
+              return;
+              }
 
-                tasks[currentDate].push({ text: input.value, done: false });
+              let tasks = getTasks();
+              if (!tasks[currentDate]) tasks[currentDate] = [];
 
-                saveTasks(tasks);
-                input.value = "";
-                renderTasks();
+              tasks[currentDate].push({ text: value, done: false });
+
+              saveTasks(tasks);
+              input.value = "";
+              renderTasks();
             }
-
+            
             function renderTasks() {
                 let list = document.getElementById("taskList");
                 list.innerHTML = "";
